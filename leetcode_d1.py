@@ -108,3 +108,57 @@ class Solution(object):
             previous = current
 
         return head
+
+
+"""
+Given a string s, find the length of the longest 
+substring without repeating characters.
+
+Example 1:
+
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+Example 2:
+
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+Example 3:
+
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+"""
+
+class Solution:
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        """
+        A solution with O(n) time complexity, a bit memory greedy
+        Saves last position where a particular symbol appeared
+        using a list where symbol position based on its ascii  code
+
+        :param s: input string
+        :return: max_len, int
+        """
+        
+        max_len = 0
+        start = 0
+        last_position = [-1 for i in range(0, 128)]
+
+        for i in range(len(s)):
+            a_code = ord(s[i])
+
+            if last_position[a_code] == -1: # check if symbol appeared before
+                max_len = max(i - start + 1, max_len)
+                last_position[a_code] = i
+            else:
+                if last_position[a_code] >= start: # if symbol appeared before current substring
+                    start = last_position[a_code] + 1
+                    last_position[a_code] = i
+                else:
+                    max_len = max(i - start +1, max_len)
+                    last_position[a_code] = i
+        return max_len
